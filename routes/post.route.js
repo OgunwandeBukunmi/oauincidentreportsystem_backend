@@ -20,38 +20,28 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
     try {
         const {
-            ParentPostLinks,
             images,
             incident_time_estimate,
-            isParentPost,
             post_message,
             post_time,
-            status,
             title,
             category,
-            role
         } = req.body;
 
-        if (!isParentPost) {
-            if (!images || !incident_time_estimate || !post_message || !post_time || !status || !title || !category || !role) {
-                return res.status(400).json({ message: "All fields are required" });
-            }
-        } else {
-            if (!ParentPostLinks || !images || !incident_time_estimate || !post_message || !post_time || !status || !title || !category || !role) {
-                return res.status(400).json({ message: "All fields are required" });
-            }
+        if (!incident_time_estimate || !post_message || !post_time || !title || !category) {
+            return res.status(400).json({ message: "All fields are required" });
         }
         const newPost = {
-            ParentPostLinks,
             images,
             incident_time_estimate,
-            isParentPost,
+            isParentPost: false,
+            parentPostLinks: [],
             post_message,
             post_time,
-            status,
+            status: "pending",
             title,
             category,
-            role,
+            role: "user",
             createdAt: new Date().toISOString(),
         };
 
