@@ -105,7 +105,7 @@ router.post("/post", authenticate, async (req, res) => {
             category,
             role: "admin",
             createdAt: new Date().toISOString(),
-            location
+            location: location || "No location"
         };
 
         const docRef = await db.collection("posts").add(newPost);
