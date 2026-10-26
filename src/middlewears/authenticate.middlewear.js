@@ -1,4 +1,5 @@
 import { getAuth } from "firebase-admin/auth";
+import { getUser } from "../utils/getUser.js"
 
 export async function authenticate(req, res, next) {
     try {
@@ -13,9 +14,8 @@ export async function authenticate(req, res, next) {
         const token = header.split(" ")[1];
 
         const decodedToken = await getAuth().verifyIdToken(token);
-
-        req.user = decodedToken;
-
+        const user = await getUser(decodedToken.email);
+        req.user = user;
         next();
     } catch (error) {
         return res.status(401).json({

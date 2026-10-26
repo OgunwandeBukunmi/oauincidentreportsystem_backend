@@ -18,6 +18,9 @@ app.use(morgan("dev"))
 
 app.use("/api/admin", adminRoutes)
 app.use("/api/posts", postRoutes)
+app.use("/health", (req, res) => {
+    res.json({ message: "Health check" })
+})
 
 
 
