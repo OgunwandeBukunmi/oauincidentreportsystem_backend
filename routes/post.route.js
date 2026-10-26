@@ -25,6 +25,7 @@ router.post("/", async (req, res) => {
             post_message,
             post_time,
             title,
+            location,
             category,
         } = req.body;
 
@@ -43,6 +44,7 @@ router.post("/", async (req, res) => {
             category,
             role: "user",
             createdAt: new Date().toISOString(),
+            location
         };
 
         const docRef = await db.collection("posts").add(newPost);

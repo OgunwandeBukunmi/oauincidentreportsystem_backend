@@ -86,6 +86,7 @@ router.post("/post", authenticate, async (req, res) => {
             post_message,
             post_time,
             title,
+            location,
             category,
         } = req.body;
 
@@ -104,6 +105,7 @@ router.post("/post", authenticate, async (req, res) => {
             category,
             role: "admin",
             createdAt: new Date().toISOString(),
+            location
         };
 
         const docRef = await db.collection("posts").add(newPost);
@@ -128,6 +130,7 @@ router.post("/parent-post", authenticate, async (req, res) => {
             post_time,
             title,
             category,
+            location,
         } = req.body;
 
         if (!incident_time_estimate || !post_message || !post_time || !title || !category) {
@@ -145,6 +148,7 @@ router.post("/parent-post", authenticate, async (req, res) => {
             category,
             role: "admin",
             createdAt: new Date().toISOString(),
+            location,
         };
 
         const docRef = await db.collection("posts").add(newPost);
