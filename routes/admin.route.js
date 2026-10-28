@@ -167,7 +167,7 @@ router.put("/posts/:id/approve", authenticate, async (req, res) => {
     try {
         const { id } = req.params
         const statusChangeTime = new Date().toISOString()
-        await db.collection("posts").doc(id).update({ status: "approved", approvedBy: req.user.username, statusChangeTime })
+        await db.collection("posts").doc(id).update({ status: "approved", statusChangeBy: req.user.username, statusChangeTime })
         res.status(200).json({ message: "Post approved" });
     } catch (error) {
         console.error("Error approving post:", error);
@@ -176,9 +176,9 @@ router.put("/posts/:id/approve", authenticate, async (req, res) => {
 })
 router.put("/posts/:id/reject", authenticate, async (req, res) => {
     try {
-        const { id } = req.params
         const statusChangeTime = new Date().toISOString()
-        await db.collection("posts").doc(id).update({ status: "rejected", rejectedBy: req.user.username, statusChangeTime })
+        const { id } = req.params
+        await db.collection("posts").doc(id).update({ status: "rejected", statusChangeBy: req.user.username, statusChangeTime })
         res.status(200).json({ message: "Post rejected" });
     } catch (error) {
         console.error("Error rejecting post:", error);
@@ -189,7 +189,7 @@ router.put("/posts/:id/reject", authenticate, async (req, res) => {
 router.put("/posts/:id/pending", authenticate, async (req, res) => {
     try {
         const statusChangeTime = new Date().toISOString()
-        await db.collection("posts").doc(req.params.id).update({ status: "pending", statusChangeTime })
+        await db.collection("posts").doc(req.params.id).update({ status: "pending", statusChangeBy: req.user.username, statusChangeTime })
         res.status(200).json({ message: "Post set to pending" })
     } catch (error) {
         res.status(500).json({ message: "Failed to update post", error: error.message })
