@@ -166,7 +166,7 @@ router.post("/parent-post", authenticate, async (req, res) => {
 router.put("/posts/:id/approve", authenticate, async (req, res) => {
     try {
         const { id } = req.params
-        await db.collection("posts").doc(id).update({ status: "approved" })
+        await db.collection("posts").doc(id).update({ status: "approved", approvedBy: req.user.username })
         res.status(200).json({ message: "Post approved" });
     } catch (error) {
         console.error("Error approving post:", error);
@@ -176,7 +176,7 @@ router.put("/posts/:id/approve", authenticate, async (req, res) => {
 router.put("/posts/:id/reject", authenticate, async (req, res) => {
     try {
         const { id } = req.params
-        await db.collection("posts").doc(id).update({ status: "rejected" })
+        await db.collection("posts").doc(id).update({ status: "rejected", rejectedBy: req.user.username })
         res.status(200).json({ message: "Post rejected" });
     } catch (error) {
         console.error("Error rejecting post:", error);
