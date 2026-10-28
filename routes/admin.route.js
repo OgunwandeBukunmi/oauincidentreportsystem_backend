@@ -166,7 +166,8 @@ router.post("/parent-post", authenticate, async (req, res) => {
 router.put("/posts/:id/approve", authenticate, async (req, res) => {
     try {
         const { id } = req.params
-        await db.collection("posts").doc(id).update({ status: "approved", approvedBy: req.user.username })
+        const statusChangeTime = new Date().toISOString()
+        await db.collection("posts").doc(id).update({ status: "approved", approvedBy: req.user.username, statusChangeTime })
         res.status(200).json({ message: "Post approved" });
     } catch (error) {
         console.error("Error approving post:", error);
@@ -176,7 +177,8 @@ router.put("/posts/:id/approve", authenticate, async (req, res) => {
 router.put("/posts/:id/reject", authenticate, async (req, res) => {
     try {
         const { id } = req.params
-        await db.collection("posts").doc(id).update({ status: "rejected", rejectedBy: req.user.username })
+        const statusChangeTime = new Date().toISOString()
+        await db.collection("posts").doc(id).update({ status: "rejected", rejectedBy: req.user.username, statusChangeTime })
         res.status(200).json({ message: "Post rejected" });
     } catch (error) {
         console.error("Error rejecting post:", error);
@@ -186,7 +188,8 @@ router.put("/posts/:id/reject", authenticate, async (req, res) => {
 
 router.put("/posts/:id/pending", authenticate, async (req, res) => {
     try {
-        await db.collection("posts").doc(req.params.id).update({ status: "pending" })
+        const statusChangeTime = new Date().toISOString()
+        await db.collection("posts").doc(req.params.id).update({ status: "pending", statusChangeTime })
         res.status(200).json({ message: "Post set to pending" })
     } catch (error) {
         res.status(500).json({ message: "Failed to update post", error: error.message })
@@ -196,7 +199,6 @@ router.put("/posts/:id/pending", authenticate, async (req, res) => {
 router.delete("/posts/:id", authenticate, async (req, res) => {
     try {
         const { id } = req.params
-        console.log(req.user)
         await db.collection("posts").doc(id).update({ deletedBy: req.user.username, deletedAt: new Date().toISOString(), status: "deleted" })
         res.status(200).json({ message: "Post deleted" });
     } catch (error) {
